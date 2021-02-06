@@ -26,8 +26,9 @@ var app = express();
 
 app.use(secure);
 
-var uri = `mongodb://${process.env.USERMONGO}:${process.env.PASSMONGO}@${process.env.ADDRESSMONGO}`;
-//var uri = `mongodb+srv://${process.env.USERDATABASE}:${process.env.PASSDATABASE}@${process.env.ADRESSDATABASE}/${process.env.NAMEDATABASE}`
+//var uri = `mongodb://${process.env.USERMONGO}:${process.env.PASSMONGO}@${process.env.ADDRESSMONGO}`;
+var uri = `mongodb+srv://${process.env.USERDATABASE}:${process.env.PASSDATABASE}@${process.env.ADRESSDATABASE}/${process.env.NAMEDATABASE}?retryWrites=true&w=majority`;
+//var uri = mongodb+srv://${process.env.USERDATABASE}:${process.env.PASSDATABASE}@${process.env.ADRESSDATABASE}/${process.env.NAMEDATABASE}`
 mongoose.connect(uri).then(result => console.log("conectado com o banco mongodb mlab"), err => console.log("erro na conexão",err));
 
 
