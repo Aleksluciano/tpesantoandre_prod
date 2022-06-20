@@ -519,6 +519,7 @@ bot.on("message", msg => {
   const list = "/list";
   const reset = "/reset";
   const resppr = "Desculpe não entendi.";
+  try {
   if (
     !msg.text
       .toString()
@@ -544,7 +545,12 @@ bot.on("message", msg => {
       console.log(e);
     }
   }
+    } catch (e) {
+      console.log(e);
+    }
+  
 });
+
 
 bot.on("callback_query", msg => {
   let subdata_quest = msg.data.substring(0, 1);
