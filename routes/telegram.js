@@ -341,6 +341,7 @@ function ultimavezDosIrmaosEmUmDia(chatId) {
             a.datebirth.getMonth(),
             a.datebirth.getDate()
           ),
+		  email: a.email,
           congregacao: nomecong,
           escalas: a.escala.length,
           ultimavez: ultimavez,
