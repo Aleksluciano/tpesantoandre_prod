@@ -265,13 +265,16 @@ function respostaDosIrmaos(mes, chatId) {
             useBom: true,
             useKeysAsHeaders: true
           };
-
+try {
           const exportToCsv = new ExportToCsv(options);
           const csvData = exportToCsv.generateCsv(dados, true);
           fs.writeFileSync("dados.csv", csvData);
           bot
             .sendDocument(chatId, "dados.csv")
             .then(a => console.log("telegramdata", a));
+			} catch (e){
+			console.log(e);
+			}
         });
     });
   });
@@ -550,7 +553,6 @@ bot.on("message", msg => {
     }
   
 });
-
 
 bot.on("callback_query", msg => {
   let subdata_quest = msg.data.substring(0, 1);
