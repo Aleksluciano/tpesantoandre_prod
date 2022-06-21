@@ -266,12 +266,14 @@ function respostaDosIrmaos(mes, chatId) {
             useKeysAsHeaders: true
           };
 try {
+          if(dados){
           const exportToCsv = new ExportToCsv(options);
           const csvData = exportToCsv.generateCsv(dados, true);
           fs.writeFileSync("dados.csv", csvData);
           bot
             .sendDocument(chatId, "dados.csv")
             .then(a => console.log("telegramdata", a));
+			}
 			} catch (e){
 			console.log(e);
 			}
