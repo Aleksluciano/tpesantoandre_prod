@@ -396,12 +396,12 @@ function emailtext(pub, ponto, escala, hash1, hash2) {
       let corlinha = estilolinha[x];
       if (corpoemail[x].ponto.pubs[z].userId == pub.userId) corlinha = "#ffffff";
       if(z != 0)emailpronto = emailpronto + '<tr>';
-      emailpronto = emailpronto + `<td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z].firstName} ${corpoemail[x].ponto.pubs[z].lastName}</b></td>
-                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z].congregation.circuit}</b></td>
-                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z].congregation.nome}</b></td>
-                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z].phone || ' '}</b></td>
-                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z].mobilephone || ' '}</b></td>
-                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z].email}</b></td></tr>`
+      emailpronto = emailpronto + `<td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z]?.firstName} ${corpoemail[x].ponto.pubs[z]?.lastName}</b></td>
+                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z]?.congregation?.circuit}</b></td>
+                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z]?.congregation?.nome}</b></td>
+                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z]?.phone || ' '}</b></td>
+                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z]?.mobilephone || ' '}</b></td>
+                        <td style="background-color:${corlinha}"><b>${corpoemail[x].ponto.pubs[z]?.email}</b></td></tr>`
     }
   }
   emailpronto = emailpronto + ` 
