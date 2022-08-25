@@ -166,7 +166,8 @@ router.put("/", function(req, res, next) {
           error: err
         });
       }
-
+      let config = [[], [], [], [], [], [], [], []];
+      ponto.config = config;
       ponto.config = req.body[i].config;
       ponto.save(function(err, result) {});
     });
