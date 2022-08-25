@@ -667,6 +667,13 @@ router.post("/cadastro/:id", function(req, res, next) {
   });
 });
 
+router.post("/cadastro/grupo/:id", function(req, res, next) {
+  res.status(200).json({
+    link: process.env.LINKGRUPOTELEGRAM,
+    nameBot: process.env.NAMEBOTTELEGRAM
+  });
+});
+
 router.post("/:date", function(req, res, next) {
   const telegrams = [];
 
