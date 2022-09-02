@@ -501,9 +501,7 @@ router.put("/:id", function(req, res, next) {
 
     if (
       req.params.id == "5a9dcb959d870c40c0fb8c93" ||
-      req.params.id == "5ae7dee5734d1d133184274f" ||
-      req.params.id == "5ae7dfa1734d1d1331842774" ||
-      req.params.id == "5ae7dfb9734d1d1331842777"
+      req.params.id == "6307feb2946437001694fbac"
     ) {
       user.firstName = req.body.firstName;
       user.lastName = req.body.lastName;
