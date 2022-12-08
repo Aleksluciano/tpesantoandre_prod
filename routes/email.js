@@ -267,7 +267,7 @@ let text = emailtext(escala[i].pontos[p][u].pubs[s], escala[i].pontos[p][u], esc
 
                   {
                     filename: 'img_ponto.jpeg',
-                    path: `${escala[i].pontos[p][u].link}`,
+                    path: `${escala[i].pontos[p][u]?.link}`,
                     cid: 'img_ponto@logo' // should be as unique as possible
                   }
                 ],
