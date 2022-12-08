@@ -12,6 +12,7 @@ var moment = require('moment');
 var exphbs = require('express-handlebars');
 var telegram = require('../routes/telegram');
 var path = require('path');
+const Ponto = require("../models/ponto");
 
 var socket = null;
 const tokenMailgun = process.env.TOKENMAILGUN
@@ -207,7 +208,7 @@ router.post('/:date', function (req, res, next) {
     }
 
 
-
+ Ponto.find().exec(function(err, pontos_root) {
     for (let i = 0; i < escala.length; i++) {
       for (let p = 0; p < escala[i].pontos.length; p++) {
 
@@ -239,6 +240,7 @@ router.post('/:date', function (req, res, next) {
 //let hash2 = 'https://tpesantoandre.com.br/email/confirm/' + emailhash.hash + '?' + 'qs1=' + emailhash.idescala + '&qs0=N' + '&qs2=' + emailhash.iduser + '&qs3=' + emailhash.idhora;
 
 let text = emailtext(escala[i].pontos[p][u].pubs[s], escala[i].pontos[p][u], escala[i]);
+let ponto_link = pontos_root.find(a=> a.id == escala[i].pontos[p][u].id)?.link;
 //console.log(text);
               let titulo = `Designação TPE para ${escala[i].pontos[p][u].pubs[s].firstName} ${escala[i].dia}`
               let mail = { user: escala[i].pontos[p][u].pubs[s], dia: escala[i].dia, hora: escala[i].hora[p].hora }
@@ -267,7 +269,7 @@ let text = emailtext(escala[i].pontos[p][u].pubs[s], escala[i].pontos[p][u], esc
 
                   {
                     filename: 'img_ponto.jpeg',
-                    path: `${escala[i].pontos[p][u]?.link}`,
+                    path: `${ponto_link}`,
                     cid: 'img_ponto@logo' // should be as unique as possible
                   }
                 ],
@@ -291,7 +293,12 @@ let text = emailtext(escala[i].pontos[p][u].pubs[s], escala[i].pontos[p][u], esc
         }
       }
     }
-
+    transporter.close();
+      res.status(200).json({
+        message: 'Emails enviados!',
+        obj: emails
+      });
+    });
 
 
 
