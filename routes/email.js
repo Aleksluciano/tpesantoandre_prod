@@ -302,17 +302,9 @@ let ponto_link = pontos_root.find(a=> a.id == escala[i].pontos[p][u].id)?.link;
 
 
 
-
-   
-
-    res.status(200).json({
-      message: 'Emails enviados!',
-      obj: emails
-    });
-
   });
 
-  transporter.close();
+  
 
 });
 
