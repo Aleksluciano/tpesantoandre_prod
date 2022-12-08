@@ -220,26 +220,26 @@ router.post('/:date', function (req, res, next) {
 //filtro por email inicio
             //if ( escala[i].pontos[p][u].pubs[s].email == 'cerjuniorr@gmail.com' ) {
 
-              let rand = Math.floor(Math.random() * 6553);
-              let emailhash = new Emailconfirm({
-                idescala: escala[i]._id,
-                iduser: escala[i].pontos[p][u].pubs[s].userId,
-                idhora: escala[i].hora[p].code,
-                hash: rand
-              });
+//let rand = Math.floor(Math.random() * 6553);
+//let emailhash = new Emailconfirm({
+//idescala: escala[i]._id,
+//iduser: escala[i].pontos[p][u].pubs[s].userId,
+//idhora: escala[i].hora[p].code,
+//hash: rand
+//});
+//
+//emailhash.save(function (err, emailresult) {
+//if (err) {
+//console.log(err)
+//}
+//console.log(emailresult);
+//
+//});
+//let hash1 = 'https://tpesantoandre.com.br/email/confirm/' + emailhash.hash + '?' + 'qs1=' + emailhash.idescala + '&qs0=S' + '&qs2=' + emailhash.iduser + '&qs3=' + emailhash.idhora;
+//let hash2 = 'https://tpesantoandre.com.br/email/confirm/' + emailhash.hash + '?' + 'qs1=' + emailhash.idescala + '&qs0=N' + '&qs2=' + emailhash.iduser + '&qs3=' + emailhash.idhora;
 
-              emailhash.save(function (err, emailresult) {
-                if (err) {
-                  console.log(err)
-                }
-                console.log(emailresult);
-
-              });
-              let hash1 = 'https://tpesantoandre.com.br/email/confirm/' + emailhash.hash + '?' + 'qs1=' + emailhash.idescala + '&qs0=S' + '&qs2=' + emailhash.iduser + '&qs3=' + emailhash.idhora;
-              let hash2 = 'https://tpesantoandre.com.br/email/confirm/' + emailhash.hash + '?' + 'qs1=' + emailhash.idescala + '&qs0=N' + '&qs2=' + emailhash.iduser + '&qs3=' + emailhash.idhora;
-              
-              let text = emailtext(escala[i].pontos[p][u].pubs[s], escala[i].pontos[p][u], escala[i], hash1, hash2);
-              console.log(text);
+let text = emailtext(escala[i].pontos[p][u].pubs[s], escala[i].pontos[p][u], escala[i]);
+//console.log(text);
               let titulo = `Designação TPE para ${escala[i].pontos[p][u].pubs[s].firstName} ${escala[i].dia}`
               let mail = { user: escala[i].pontos[p][u].pubs[s], dia: escala[i].dia, hora: escala[i].hora[p].hora }
               emails.push(mail);
@@ -309,7 +309,7 @@ router.post('/:date', function (req, res, next) {
 
 });
 
-function emailtext(pub, ponto, escala, hash1, hash2) {
+function emailtext(pub, ponto, escala) {
   let corpoemail = []
   for (let p = 0; p < escala.pontos.length; p++) {
 
