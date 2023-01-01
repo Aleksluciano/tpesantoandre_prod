@@ -627,7 +627,8 @@ cron.schedule(tempo_lembrete_auto, function() {
             if (leds[i].iduser.telegram) {
               telegram.bot.sendMessage(
                 leds[i].iduser.telegram,
-                `*Lembrete:* Você tem uma designação amanhã ${escala.dia} ${escala.diasemana}. Favor verificar o status do seu companheiro(a) no site TPE. Bom trabalho!`,
+                `*Lembrete:* Você tem uma designação amanhã ${escala.dia} ${escala.diasemana}. Favor verificar o status do seu companheiro(a) no site TPE. 
+Após sua designação preencha a pesquisa de colocações acessando o link, ${process.env.LINKFORM} ou pelo QR Code que se encontra atrás do carrinho. Bom trabalho!`,
                 { parse_mode: "Markdown" }
               );
             }
