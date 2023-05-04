@@ -342,6 +342,7 @@ function ultimavezDosIrmaosEmUmDia(chatId) {
             a.datebirth.getDate()
           ),
 		  email: a.email,
+		celular: a.mobilephone,
           congregacao: nomecong,
           escalas: a.escala.length,
           ultimavez: ultimavez,
