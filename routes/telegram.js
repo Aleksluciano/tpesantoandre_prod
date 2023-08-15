@@ -155,12 +155,13 @@ function respostaDosIrmaos(mes, chatId) {
                   } else {
                     irmao.substituiu++;
                   }
-                } else if (a.nao && !a.sim) {
-                  irmao.total++;
-                  irmao.recusou++;
-                } else if (!a.nao && !a.sim) {
+                } else if (a?.oldnao) {
                   irmao.total++;
                   irmao.semresposta++;
+                }
+                else if (a.nao && !a.sim) {
+                  irmao.total++;
+                  irmao.recusou++;
                 }
               } else {
                 let confirmou = 0;
@@ -182,12 +183,12 @@ function respostaDosIrmaos(mes, chatId) {
                   } else {
                     substituiu++;
                   }
+                } else if (a?.oldnao) {
+                  total++;
+                  semresposta++;
                 } else if (a.nao && !a.sim) {
                   total++;
                   recusou++;
-                } else if (!a.nao && !a.sim) {
-                  total++;
-                  semresposta++;
                 }
 
                 dados.push({
