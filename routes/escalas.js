@@ -392,6 +392,7 @@ cron.schedule(tempo_rejeita_auto, function() {
       for (let i = 0; i < leds.length; i++) {
         let led = leds[i];
         led.nao = true;
+        led.oldnao = true;
         rejectThem(led, escala);
       }
     });
