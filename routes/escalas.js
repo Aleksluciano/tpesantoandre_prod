@@ -12,7 +12,8 @@ var Subhist = require("../models/subhist");
 var socket = null;
 
 var tempo_designa_auto = "10 21 * * 0-6";
-var tempo_rejeita_auto = "0 22 * * 0-6";
+//var tempo_rejeita_auto = "0 22 * * 0-6";
+var tempo_avisa_semresposta = "0 12 * * 0-6";
 var tempo_deleta_auto = "0 21 * * 0-6";
 var tempo_lembrete_auto = "0 17 * * 0-6";
 
@@ -340,8 +341,7 @@ function procuraSemParceiro(escala, registro, mudanca, ajustados) {
   });
 }
 
-//rejeita automatico quem não respondeu
-cron.schedule(tempo_rejeita_auto, function() {
+cron.schedule(tempo_avisa_semresposta, function() {
   let tresDiasDepois = moment.utc().add(3, "day");
   let dataTresDiasDepois = new Date(tresDiasDepois);
   let dataTresDiasDepoisMonth = dataTresDiasDepois.getMonth();
@@ -365,39 +365,129 @@ cron.schedule(tempo_rejeita_auto, function() {
     0
   );
 
+  console.log("dataini",dataini)
+
   Escala.findOne({ data: { $gte: dataini, $lte: datafim } }, function(
     err,
     escala
   ) {
     if (err) {
-      return console.log("erro schedule");
+      return console.log("erro schedule1", err);
     }
 
     if (!escala) {
-      return console.log("erro schedule");
+      return console.log("erro schedule3");
     }
 
-    Led.find({ idescala: escala._id, nao: false, sim: false }, function(
+   // Led.find({ idescala: escala._id, nao: false, sim: false }, function(
+    Led.aggregate([
+      {
+        $match: {
+          idescala: escala._id, nao: false, sim: false// Filtra documentos pelo valor de idescala
+        }
+      },
+      {
+        $lookup: {
+          from: "users",              // nome da coleção onde você quer buscar os dados relacionados
+          localField: "iduser",      // campo da coleção atual (led) que contém o ID relacionado
+          foreignField: "_id",       // campo da coleção 'user' que contém o ID correspondente
+          as: "user_info"            // nome do campo onde os dados relacionados serão adicionados no documento resultante
+        }
+      },
+      {
+        $unwind: "$user_info"    // (opcional) transforma o array 'user_info' em um objeto único
+      }
+    ]).exec(function(
       err,
       leds
     ) {
+      console.log("leds",leds);
       if (err) {
-        console.log("erro schedule");
+        console.log("erro schedule4",err);
       }
 
       if (!leds) {
-        return console.log("erro schedule");
+        return console.log("erro schedule5");
       }
 
       for (let i = 0; i < leds.length; i++) {
-        let led = leds[i];
-        led.nao = true;
-        led.oldnao = true;
-        rejectThem(led, escala);
+        //console.log("leds[i]",leds[i]);
+        try {
+          if (leds[i].user_info.telegram) {
+            telegram.bot.sendMessage(
+              leds[i].user_info.telegram,
+              `*Lembrete:* Ainda não temos a resposta para a sua desiginação em ${escala.dia} ${escala.diasemana}. Favor responder o mais breve possível para o bom andamento do arranjo! Obrigado!`,
+              { parse_mode: "Markdown" }
+            );
+          }
+          console.log(leds[i].user_info.firstName);
+        } catch (e) {
+          console.log(e);
+        }
+
       }
     });
   });
 });
+
+//rejeita automatico quem não respondeu
+// cron.schedule(tempo_rejeita_auto, function() {
+//   let tresDiasDepois = moment.utc().add(3, "day");
+//   let dataTresDiasDepois = new Date(tresDiasDepois);
+//   let dataTresDiasDepoisMonth = dataTresDiasDepois.getMonth();
+//   let dataTresDiasDepoisYear = dataTresDiasDepois.getFullYear();
+//   let dataTresDiasDepoisDay = dataTresDiasDepois.getDate();
+
+//   let dataini = new Date(
+//     dataTresDiasDepoisYear,
+//     dataTresDiasDepoisMonth,
+//     dataTresDiasDepoisDay,
+//     0,
+//     0,
+//     0
+//   );
+//   let datafim = new Date(
+//     dataTresDiasDepoisYear,
+//     dataTresDiasDepoisMonth,
+//     dataTresDiasDepoisDay,
+//     3,
+//     0,
+//     0
+//   );
+
+//   Escala.findOne({ data: { $gte: dataini, $lte: datafim } }, function(
+//     err,
+//     escala
+//   ) {
+//     if (err) {
+//       return console.log("erro schedule");
+//     }
+
+//     if (!escala) {
+//       return console.log("erro schedule");
+//     }
+
+//     Led.find({ idescala: escala._id, nao: false, sim: false }, function(
+//       err,
+//       leds
+//     ) {
+//       if (err) {
+//         console.log("erro schedule");
+//       }
+
+//       if (!leds) {
+//         return console.log("erro schedule");
+//       }
+
+//       for (let i = 0; i < leds.length; i++) {
+//         let led = leds[i];
+//         led.nao = true;
+//         led.oldnao = true;
+//         rejectThem(led, escala);
+//       }
+//     });
+//   });
+// });
 
 function rejectThem(led, escala) {
   led.save().then(() => {
