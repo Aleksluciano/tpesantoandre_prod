@@ -155,7 +155,7 @@ function respostaDosIrmaos(mes, chatId) {
                   } else {
                     irmao.substituiu++;
                   }
-                } else if (a?.oldnao) {
+                } else if (a?.oldnao || (!a.sim && !a.nao)) {
                   irmao.total++;
                   irmao.semresposta++;
                 }
@@ -183,7 +183,7 @@ function respostaDosIrmaos(mes, chatId) {
                   } else {
                     substituiu++;
                   }
-                } else if (a?.oldnao) {
+                } else if (a?.oldnao || (!a.sim && !a.nao)) {
                   total++;
                   semresposta++;
                 } else if (a.nao && !a.sim) {
