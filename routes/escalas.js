@@ -419,6 +419,20 @@ cron.schedule(tempo_avisa_semresposta, function() {
               `*Lembrete:* Ainda não temos a resposta para a sua desiginação em ${escala.dia} ${escala.diasemana}. Favor responder o mais breve possível para o bom andamento do arranjo! Obrigado!`,
               { parse_mode: "Markdown" }
             );
+               if(leds[i].user_info.email !== leds[i].user_info.eldermail){
+              User.findOne({email: leds[i].user_info.eldermail}, function(err, userelder) {
+
+                if(userelder.telegram) {
+                  telegram.bot.sendMessage(
+                    userelder.telegram,
+                    `*Lembrete Coordenador:* ${leds[i].user_info.firstName} ${leds[i].user_info.lastName} ainda não confirmou a designação em ${escala.dia} ${escala.diasemana}
+*contato:* https://wa.me/55${leds[i].user_info.mobilephone}`,
+                    { parse_mode: "Markdown",
+                      disable_web_page_preview: true}
+                  );
+                }
+              });
+            }
           }
           console.log(leds[i].user_info.firstName);
         } catch (e) {
