@@ -117,13 +117,13 @@ bot.onText(/\/statuscong/, (msg, match) => {
     let tomorrowyear = dia.getFullYear();
     let tomorrowday = dia.getDate();
 
-    let dataini = new Date(2020, 9, 1, 0, 0, 0);
-    let datafim = new Date(tomorrowyear, tomorrowmonth, tomorrowday, 5, 0, 0);
+    let dataini = new Date(tomorrowyear, tomorrowmonth, tomorrowday, 0, 0, 0);
+    //let datafim = new Date(tomorrowyear, tomorrowmonth, tomorrowday, 5, 0, 0);
   console.log(dataini);
-console.log(datafim);
+//console.log(datafim);
 	   let emails = "";
       emails = process.env.COORDENADOREMAILS;
-      console.log('emails', emails, user.email);
+      console.log('emails', emails);
 console.log('chatId', chatId)
     User.findOne({ telegram: chatId }, function(err, user) {
       console.log(user)
