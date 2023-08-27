@@ -106,7 +106,7 @@ bot.onText(/\/list/, (msg, match) => {
   }
 });
 
-bot.onText(/\/status/, (msg, match) => {
+bot.onText(/\/statuscong/, (msg, match) => {
   const chatId = msg.chat.id;
 
     let diaatual = moment.utc().add(1, "day");
@@ -254,7 +254,7 @@ Contato: *${reg.contato}*
             });
 
             message += `
-/status
+/statuscong
 `
 
 
@@ -702,7 +702,7 @@ bot.on("message", msg => {
   const report = "/report";
   const list = "/list";
   const reset = "/reset";
-  const status = "/status";
+  const status = "/statuscong";
   const resppr = "Desculpe não entendi.";
   try {
   if (
@@ -731,10 +731,12 @@ bot.on("message", msg => {
     try {
       bot.sendMessage(chatId, resppr, { parse_mode: "Markdown" });
     } catch (e) {
+      console.log("ERROA");    
       console.log(e);
     }
   }
     } catch (e) {
+      console.log("ERROB");  
       console.log(e);
     }
   
