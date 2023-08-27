@@ -19,6 +19,7 @@ const User2 = require("../models/user");
 const Circuito = require("../models/circuito");
 const fs = require("fs");
 const { ExportToCsv } = require("export-to-csv");
+const moment = require("moment");
 
 var buttonConfirmation = [];
 cron.schedule("0 */1 * * *", () => (buttonConfirmation = []));
