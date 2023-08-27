@@ -107,7 +107,7 @@ bot.onText(/\/list/, (msg, match) => {
   }
 });
 
-bot.onText(/\/statuscong/, (msg, match) => {
+bot.onText(/\/status/, (msg, match) => {
   const chatId = msg.chat.id;
   console.log("entrei");
 	console.log(process.env.COORDENADOREMAILS);
@@ -235,7 +235,7 @@ console.log('chatId', chatId)
                 } else {
                   regcomp.statuscomp = "🟡";
                 }
-                if (regcomp.sub) {
+                if (led.sub) {
                   regcomp.statuscomp = "🟢";
                   regcomp.usercompname = led.sub.firstName + " " + led.sub.lastName;
                 }
@@ -257,7 +257,7 @@ Contato: *${reg.contato}*
             });
 
             message += `
-/statuscong
+/status
 `
 
 
@@ -705,7 +705,7 @@ bot.on("message", msg => {
   const report = "/report";
   const list = "/list";
   const reset = "/reset";
-  const status = "/statuscong";
+  const status = "/status";
   const resppr = "Desculpe não entendi.";
   try {
   if (
