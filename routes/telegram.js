@@ -106,6 +106,181 @@ bot.onText(/\/list/, (msg, match) => {
   }
 });
 
+bot.onText(/\/status/, (msg, match) => {
+  const chatId = msg.chat.id;
+
+    let diaatual = moment.utc().add(1, "day");
+    let dia = new Date(diaatual);
+    let tomorrowmonth = dia.getMonth();
+    let tomorrowyear = dia.getFullYear();
+    let tomorrowday = dia.getDate();
+
+    let dataini = new Date(2020, 9, 1, 0, 0, 0);
+    let datafim = new Date(tomorrowyear, tomorrowmonth, tomorrowday, 5, 0, 0);
+  //  console.log(dataini);
+    //console.log(datafim);
+//console.log('chatId', chatId)
+    User.findOne({ telegram: chatId }, function(err, user) {
+      //console.log(user)
+      let emails = "";
+      emails = process.env.COORDENADOREMAILS;
+      console.log('emails', emails, user.email);
+      let arrayEmails = emails.split(',');
+      if(arrayEmails.includes(user.email)) {
+        Escala.find({
+          data: {$gte: dataini},
+          "pontos": {
+
+            $elemMatch: {
+              $elemMatch: {
+                "pubs.congregation._id": user.congregation.toString(),
+              }
+            }
+
+
+          }
+        }, function (
+          err,
+          escalas
+        ) {
+          if (err) {
+            return console.log("erro schedule");
+          }
+
+          if (escalas.length == 0) {
+            return console.log("sem escala");
+          }
+
+          // console.log('achei', escalas)
+          let registro = [];
+
+
+          let escalasId = [];
+          let usersId = [];
+
+          for (let x = 0; x < escalas.length; x++) {
+            escalasId.push(escalas[x]._id);
+            let escala = escalas[x];
+
+            for (let p = 0; p < escala.pontos.length; p++) {
+              for (let u = 0; u < escala.pontos[p].length; u++) {
+                for (let s = 0; s < escala.pontos[p][u].npubs; s++) {
+                  if (escala.pontos[p][u].pubs[s] && escala.pontos[p][u].pubs[s].congregation._id == user.congregation.toString()) {
+                    let usermainId = escala.pontos[p][u].pubs[s].userId;
+                    let usercompId = s == 0 ? escala.pontos[p][u].pubs[1].userId : escala.pontos[p][u].pubs[0].userId;
+                    registro.push({
+                      user: escala.pontos[p][u].pubs[s].userId,
+                      usercomp: s == 0 ? escala.pontos[p][u].pubs[1].userId : escala.pontos[p][u].pubs[0].userId,
+                      usercompname: s == 0 ? escala.pontos[p][u].pubs[1].firstName + " " + escala.pontos[p][u].pubs[1].lastName : escala.pontos[p][u].pubs[0].firstName + " " + escala.pontos[p][u].pubs[0].lastName,
+                      ponto: escala.pontos[p][u].name,
+                      username: escala.pontos[p][u].pubs[s].firstName + " " + escala.pontos[p][u].pubs[s].lastName,
+                      dia: escala.dia,
+                      diasemana: escala.diasemana,
+                      congregacao: escala.pontos[p][u].pubs[s].congregation.nome,
+                      hora: escala.hora[p].hora,
+                      horacode: escala.hora[p].code,
+                      contato: `https://wa.me/55${escala.pontos[p][u].pubs[s].mobilephone}`,
+                      nao: false,
+                      sim: false,
+                      statususer: "🟡",
+                      statuscomp: "🟡",
+                      p: p,
+                      u: u,
+                      s: s
+                    });
+
+                    usersId.push(usermainId);
+                    usersId.push(usercompId);
+                  }
+                }
+              }
+            }
+          }
+
+//console.log(registro);
+
+          Led.find({idescala: {$in: escalasId}, iduser: {$in: usersId}}).exec(function (err, leds) {
+            if (err) {
+              console.log("erro schedule");
+            }
+
+            if (leds.length == 0) {
+              return console.log("erro schedule");
+            }
+
+            for (let i = 0; i < leds.length; i++) {
+              let led = leds[i];
+
+              let reg = registro.find(a => a.user == led.iduser && a.horacode == led.horacode);
+              if (reg) {
+                if (led.sim) {
+                  reg.statususer = "🟢";
+                } else if (led.nao) {
+                  reg.statususer = "🔴";
+                } else {
+                  reg.statususer = "🟡";
+                }
+              }
+              let regcomp = registro.find(a => a.usercomp == led.iduser && a.horacode == led.horacode);
+              console.log('REGCOMP', regcomp);
+              if (regcomp) {
+                if (led.sim) {
+                  regcomp.statuscomp = "🟢";
+                } else if (led.nao) {
+                  regcomp.statuscomp = "🔴";
+                } else {
+                  regcomp.statuscomp = "🟡";
+                }
+                if (regcomp.sub) {
+                  regcomp.statuscomp = "🟢";
+                  regcomp.usercompname = led.sub.firstName + " " + led.sub.lastName;
+                }
+              }
+            }
+            let message = `*Status das próximas designações*`;
+            registro.forEach(function (reg) {
+
+              message += `
+
+Irmão: *${reg.statususer} ${reg.username}*
+Comp: *${reg.statuscomp} ${reg.usercompname}*
+Dia: *${reg.dia} ${reg.diasemana}*
+Hora: *${reg.hora}*
+Ponto: *${reg.ponto}*
+Contato: *${reg.contato}*
+
+`;
+            });
+
+            message += `
+/status
+`
+
+
+            bot.sendMessage(chatId, message, {
+              parse_mode: "Markdown",
+              disable_web_page_preview: true
+            })
+              .then(m => {
+                console.log(m);
+              })
+              .catch(erro0 => {
+                console.log(erro0);
+              });
+
+            console.log(message);
+
+          });
+          //console.log(registro)
+
+        });
+      }
+    });
+
+
+
+});
+
 function respostaDosIrmaos(mes, chatId) {
   let date = new Date();
   let data1 = new Date(date.setMonth(date.getMonth() - parseInt(mes)));
@@ -526,6 +701,7 @@ bot.on("message", msg => {
   const report = "/report";
   const list = "/list";
   const reset = "/reset";
+  const status = "/status";
   const resppr = "Desculpe não entendi.";
   try {
   if (
@@ -545,7 +721,11 @@ bot.on("message", msg => {
     !msg.text
       .toString()
       .toLowerCase()
-      .includes(reset)
+      .includes(reset) &&
+    !msg.text
+      .toString()
+      .toLowerCase()
+      .includes(status)
   ) {
     try {
       bot.sendMessage(chatId, resppr, { parse_mode: "Markdown" });
