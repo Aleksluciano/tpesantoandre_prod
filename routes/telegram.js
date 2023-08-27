@@ -108,6 +108,8 @@ bot.onText(/\/list/, (msg, match) => {
 
 bot.onText(/\/statuscong/, (msg, match) => {
   const chatId = msg.chat.id;
+  console.log("entrei");
+	console.log(process.env.COORDENADOREMAILS);
 
     let diaatual = moment.utc().add(1, "day");
     let dia = new Date(diaatual);
@@ -124,7 +126,7 @@ console.log(datafim);
       console.log('emails', emails, user.email);
 console.log('chatId', chatId)
     User.findOne({ telegram: chatId }, function(err, user) {
-      //console.log(user)
+      console.log(user)
    
       let arrayEmails = emails.split(',');
       if(arrayEmails.includes(user.email)) {
