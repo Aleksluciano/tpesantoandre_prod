@@ -173,6 +173,7 @@ console.log('chatId', chatId)
                     let usermainId = escala.pontos[p][u].pubs[s].userId;
                     let usercompId = s == 0 ? escala.pontos[p][u].pubs[1].userId : escala.pontos[p][u].pubs[0].userId;
                     registro.push({
+		      idescala: escala._id.toString(),
                       user: escala.pontos[p][u].pubs[s].userId,
                       usercomp: s == 0 ? escala.pontos[p][u].pubs[1].userId : escala.pontos[p][u].pubs[0].userId,
                       usercompname: s == 0 ? escala.pontos[p][u].pubs[1].firstName + " " + escala.pontos[p][u].pubs[1].lastName : escala.pontos[p][u].pubs[0].firstName + " " + escala.pontos[p][u].pubs[0].lastName,
@@ -214,8 +215,8 @@ console.log('chatId', chatId)
 
             for (let i = 0; i < leds.length; i++) {
               let led = leds[i];
-
-              let reg = registro.find(a => a.user == led.iduser && a.horacode == led.horacode);
+               led.idescala = led.idescala.toString();
+              let reg = registro.find(a => a.user == led.iduser && a.horacode == led.horacode && a.idescala == led.idescala);
               if (reg) {
                 if (led.sim) {
                   reg.statususer = "🟢";
@@ -225,7 +226,7 @@ console.log('chatId', chatId)
                   reg.statususer = "🟡";
                 }
               }
-              let regcomp = registro.find(a => a.usercomp == led.iduser && a.horacode == led.horacode);
+              let regcomp = registro.find(a => a.usercomp == led.iduser && a.horacode == led.horacode && a.idescala == led.idescala);
               console.log('REGCOMP', regcomp);
               if (regcomp) {
                 if (led.sim) {
