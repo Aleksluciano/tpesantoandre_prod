@@ -425,7 +425,7 @@ cron.schedule(tempo_avisa_semresposta, function() {
                 if(userelder.telegram) {
                   telegram.bot.sendMessage(
                     userelder.telegram,
-                    `*Lembrete Coordenador:* ${leds[i].user_info.firstName} ${leds[i].user_info.lastName} ainda não confirmou a designação em ${escala.dia} ${escala.diasemana}
+                    `*Lembrete Assistente:* ${leds[i].user_info.firstName} ${leds[i].user_info.lastName} ainda não confirmou a designação em ${escala.dia} ${escala.diasemana}
 *contato:* https://wa.me/55${leds[i].user_info.mobilephone}`,
                     { parse_mode: "Markdown",
                       disable_web_page_preview: true}
