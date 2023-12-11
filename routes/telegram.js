@@ -128,7 +128,8 @@ bot.onText(/\/status/, (msg, match) => {
 console.log('chatId', chatId)
     User.findOne({ telegram: chatId }, function(err, user) {
       console.log(user)
-   
+      if(!user)return console.log('user não econtrado');
+	    
       let arrayEmails = emails.split(',');
       if(arrayEmails.includes(user?.email)) {
         Escala.find({
