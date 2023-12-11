@@ -130,7 +130,7 @@ console.log('chatId', chatId)
       console.log(user)
    
       let arrayEmails = emails.split(',');
-      if(arrayEmails.includes(user.email)) {
+      if(arrayEmails.includes(user?.email)) {
         Escala.find({
           data: {$gte: dataini},
           "pontos": {
